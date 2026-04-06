@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "*.html",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    { "src": "/", "dest": "/index.html" },
+    { "src": "/khoa-hoc", "dest": "/khoa-hoc.html" },
+    { "src": "/khoa-hoc.html", "dest": "/khoa-hoc.html" }
+  ]
+}

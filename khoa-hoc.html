@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ba Ngày Sống Trong Tánh Biết — Thầy Mã Thiên | 10-12/04/2026</title>
+  <meta name="description" content="Khóa thực hành trực tiếp 3 buổi sáng: 5:30–6:30, ngày 10·11·12/04/2026. Dẫn dắt bởi Thầy Mã Thiên. Chỉ 20 chỗ." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink: #0a0907;
+      --gold: #c9a96e;
+      --gold-light: #e8d5b0;
+      --gold-dim: #8a6d3b;
+      --warm-white: #f5f0e8;
+      --muted: #7a7060;
+      --surface: #121008;
+      --surface-2: #1a1510;
+      --surface-3: #221c12;
+      --border: rgba(201,169,110,0.15);
+      --border-strong: rgba(201,169,110,0.3);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--ink);
+      color: var(--warm-white);
+      font-family: 'Be Vietnam Pro', sans-serif;
+      font-weight: 300;
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+
+    /* Grain */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container { max-width: 700px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+    /* ── URGENCY BAR ── */
+    .urgency-bar {
+      background: rgba(201,169,110,0.1);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 24px;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--gold-light);
+      letter-spacing: 0.05em;
+      position: sticky; top: 0; z-index: 100;
+      backdrop-filter: blur(10px);
+    }
+    .urgency-bar span { color: var(--gold); font-weight: 500; }
+
+    /* ── NAV ── */
+    nav {
+      padding: 28px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-decoration: none;
+    }
+    .nav-cta {
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-cta:hover { color: var(--gold); }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 72px 0 64px;
+      text-align: center;
+      position: relative;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%; transform: translateX(-50%);
+      width: 400px; height: 400px;
+      background: radial-gradient(ellipse at center, rgba(201,169,110,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-meta {
+      font-size: 0.75rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin-bottom: 40px;
+    }
+
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.4rem, 7vw, 4rem);
+      font-weight: 400;
+      line-height: 1.2;
+      color: var(--warm-white);
+      margin-bottom: 20px;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+    .hero-title .small-line {
+      display: block;
+      font-size: 0.55em;
+      letter-spacing: 0.1em;
+      color: var(--gold-dim);
+      margin-top: 8px;
+      font-style: normal;
+    }
+
+    .hero-sub {
+      font-size: 1rem;
+      color: var(--muted);
+      max-width: 440px;
+      margin: 0 auto 48px;
+      line-height: 1.85;
+    }
+
+    .meta-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 52px;
+    }
+    .pill {
+      background: rgba(201,169,110,0.08);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 7px 18px;
+      font-size: 0.8rem;
+      color: var(--gold-light);
+      letter-spacing: 0.03em;
+    }
+
+    .btn-hero {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--ink);
+      text-decoration: none;
+      padding: 17px 42px;
+      border-radius: 8px;
+      font-weight: 500;
+      font-size: 0.95rem;
+      letter-spacing: 0.04em;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 60%);
+    }
+    .btn-hero:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 12px 40px rgba(201,169,110,0.3); }
+
+    .hero-note { font-size: 0.8rem; color: var(--muted); margin-top: 16px; }
+
+    /* ── SECTION COMMON ── */
+    section { padding: 72px 0; }
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0;
+    }
+
+    .section-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin-bottom: 40px;
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.7rem, 4vw, 2.4rem);
+      font-weight: 400;
+      line-height: 1.3;
+      color: var(--warm-white);
+      margin-bottom: 20px;
+    }
+    .section-title em { font-style: italic; color: var(--gold); }
+
+    /* ── PAIN SECTION ── */
+    .pain-list { margin-top: 40px; }
+    .pain-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--border);
+      opacity: 0; transform: translateY(12px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .pain-item.visible { opacity: 1; transform: none; }
+    .pain-x { color: var(--gold-dim); font-size: 1rem; line-height: 1.8; flex-shrink: 0; }
+    .pain-text { font-size: 0.95rem; color: var(--warm-white); }
+
+    .pain-closing {
+      margin-top: 36px;
+      padding: 24px 28px;
+      background: rgba(201,169,110,0.05);
+      border-left: 2px solid var(--gold-dim);
+      border-radius: 0 8px 8px 0;
+      font-size: 0.92rem;
+      color: var(--gold-light);
+      font-style: italic;
+      opacity: 0; transform: translateY(12px);
+      transition: opacity 0.6s ease 0.3s, transform 0.6s ease 0.3s;
+    }
+    .pain-closing.visible { opacity: 1; transform: none; }
+
+    /* ── INSIGHT ── */
+    .insight-section { text-align: center; }
+    .insight-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
+      font-weight: 400;
+      line-height: 1.45;
+      color: var(--warm-white);
+      margin-bottom: 40px;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+    .insight-quote.visible { opacity: 1; }
+    .insight-quote em { font-style: italic; color: var(--gold); }
+
+    .tanh-biet-box {
+      background: var(--surface-2);
+      border: 1px solid var(--border-strong);
+      border-radius: 12px;
+      padding: 48px 36px;
+      margin-top: 40px;
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .tanh-biet-box.visible { opacity: 1; transform: none; }
+    .tanh-biet-word {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3rem;
+      font-weight: 300;
+      color: var(--gold);
+      letter-spacing: 0.08em;
+      display: block;
+      margin-bottom: 24px;
+    }
+    .tanh-biet-desc { font-size: 0.95rem; color: var(--muted); line-height: 2; }
+    .tanh-biet-desc strong { color: var(--warm-white); display: block; margin-top: 12px; font-weight: 400; font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-style: italic; }
+
+    /* ── KHÓA HỌC INFO ── */
+    .course-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 40px 0;
+    }
+    .course-card {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px 24px;
+      opacity: 0; transform: translateY(16px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .course-card.visible { opacity: 1; transform: none; }
+    .course-card.highlight {
+      border-color: var(--gold-dim);
+      background: var(--surface-3);
+      grid-column: 1 / -1;
+    }
+    .card-icon { font-size: 1.4rem; margin-bottom: 12px; }
+    .card-label { font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+    .card-value { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 400; color: var(--warm-white); line-height: 1.3; }
+    .card-value.price { color: var(--gold); font-size: 2rem; }
+    .card-sub { font-size: 0.8rem; color: var(--muted); margin-top: 4px; }
+
+    /* ── 5 GIÁ TRỊ ── */
+    .values-list { margin-top: 40px; display: flex; flex-direction: column; gap: 0; }
+    .value-item {
+      display: flex;
+      gap: 24px;
+      padding: 32px 0;
+      border-bottom: 1px solid var(--border);
+      opacity: 0; transform: translateX(-12px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .value-item.visible { opacity: 1; transform: none; }
+    .value-item:last-child { border-bottom: none; }
+    .value-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.5rem;
+      font-weight: 300;
+      color: rgba(201,169,110,0.2);
+      line-height: 1;
+      min-width: 48px;
+      padding-top: 4px;
+    }
+    .value-body { flex: 1; }
+    .value-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem;
+      font-weight: 400;
+      color: var(--gold-light);
+      margin-bottom: 8px;
+    }
+    .value-desc { font-size: 0.9rem; color: var(--muted); line-height: 1.8; }
+
+    /* ── DÀNH CHO AI ── */
+    .for-who-list { margin-top: 40px; }
+    .for-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+      opacity: 0; transform: translateY(10px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    .for-item.visible { opacity: 1; transform: none; }
+    .for-item:last-child { border-bottom: none; }
+    .for-check { color: var(--gold); font-size: 0.9rem; line-height: 1.8; flex-shrink: 0; }
+    .for-text { font-size: 0.95rem; }
+
+    /* ── TEACHER ── */
+    .teacher-section { text-align: center; }
+    .teacher-portrait {
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      border: 2px solid var(--border-strong);
+      background: var(--surface-2);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3rem;
+      color: var(--gold);
+      margin: 0 auto 28px;
+    }
+    .teacher-name-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      color: var(--warm-white);
+      margin-bottom: 8px;
+    }
+    .teacher-sub { font-size: 0.85rem; color: var(--gold-dim); letter-spacing: 0.08em; margin-bottom: 32px; }
+    .teacher-body { font-size: 0.92rem; color: var(--muted); line-height: 2; max-width: 520px; margin: 0 auto 32px; }
+    .teacher-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-style: italic;
+      color: var(--gold-light);
+      padding: 28px 32px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface-2);
+      position: relative;
+    }
+    .teacher-quote::before {
+      content: '"';
+      position: absolute;
+      top: -20px; left: 24px;
+      font-size: 4rem;
+      color: var(--gold-dim);
+      font-family: 'Cormorant Garamond', serif;
+      line-height: 1;
+    }
+
+    /* ── FAQ ── */
+    .faq-list { margin-top: 40px; }
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+      opacity: 0; transform: translateY(10px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    .faq-item.visible { opacity: 1; transform: none; }
+    .faq-q {
+      width: 100%;
+      background: none;
+      border: none;
+      color: var(--warm-white);
+      font-family: 'Be Vietnam Pro', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 400;
+      text-align: left;
+      padding: 24px 0;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      transition: color 0.2s;
+    }
+    .faq-q:hover { color: var(--gold); }
+    .faq-icon {
+      color: var(--gold-dim);
+      font-size: 1.2rem;
+      flex-shrink: 0;
+      transition: transform 0.3s ease;
+    }
+    .faq-item.open .faq-icon { transform: rotate(45deg); color: var(--gold); }
+    .faq-a {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.9;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.3s ease;
+      padding-bottom: 0;
+    }
+    .faq-item.open .faq-a { max-height: 300px; padding-bottom: 28px; }
+
+    /* ── CTA FINAL ── */
+    .cta-section {
+      text-align: center;
+      padding: 80px 0 72px;
+      position: relative;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%; transform: translateX(-50%);
+      width: 500px; height: 300px;
+      background: radial-gradient(ellipse at center, rgba(201,169,110,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      font-weight: 400;
+      color: var(--warm-white);
+      margin-bottom: 16px;
+      line-height: 1.3;
+    }
+    .cta-sub { font-size: 0.95rem; color: var(--muted); margin-bottom: 48px; }
+    .btn-cta {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--ink);
+      text-decoration: none;
+      padding: 20px 52px;
+      border-radius: 8px;
+      font-weight: 500;
+      font-size: 1rem;
+      letter-spacing: 0.04em;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .btn-cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 60%);
+    }
+    .btn-cta:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 16px 48px rgba(201,169,110,0.35); }
+    .cta-price { display: block; font-size: 0.85rem; color: var(--muted); margin-top: 4px; }
+    .cta-meta { font-size: 0.8rem; color: var(--muted); margin-top: 24px; line-height: 2; }
+
+    .payment-info {
+      margin-top: 40px;
+      padding: 28px 32px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      text-align: left;
+    }
+    .payment-title { font-size: 0.78rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+    .payment-methods { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+    .payment-badge {
+      background: rgba(201,169,110,0.08);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 14px;
+      font-size: 0.8rem;
+      color: var(--gold-light);
+    }
+    .payment-note { font-size: 0.85rem; color: var(--muted); line-height: 1.8; }
+    .payment-note strong { color: var(--warm-white); font-weight: 400; }
+
+    /* ── LEAD MAGNET STRIP ── */
+    .lead-strip {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 40px 36px;
+      display: flex;
+      gap: 28px;
+      align-items: center;
+      margin-bottom: 72px;
+    }
+    .lead-strip-icon { font-size: 2.5rem; flex-shrink: 0; }
+    .lead-strip-body { flex: 1; }
+    .lead-strip-title { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: var(--warm-white); margin-bottom: 6px; }
+    .lead-strip-sub { font-size: 0.85rem; color: var(--muted); margin-bottom: 16px; }
+    .btn-outline {
+      display: inline-block;
+      border: 1px solid var(--gold-dim);
+      color: var(--gold);
+      text-decoration: none;
+      padding: 10px 24px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      transition: all 0.2s ease;
+    }
+    .btn-outline:hover { background: rgba(201,169,110,0.08); }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 36px 0;
+      text-align: center;
+    }
+    .footer-text { font-size: 0.78rem; color: var(--muted); line-height: 2; }
+    .footer-text a { color: var(--gold-dim); text-decoration: none; }
+
+    /* ── SCROLL REVEAL WRAPPER ── */
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ── PAGE FADE ── */
+    .page-fade { opacity: 0; animation: pageIn 0.8s ease 0.1s forwards; }
+    @keyframes pageIn { to { opacity: 1; } }
+
+    @media (max-width: 560px) {
+      .course-grid { grid-template-columns: 1fr; }
+      .course-card.highlight { grid-column: auto; }
+      .lead-strip { flex-direction: column; text-align: center; }
+      nav { flex-direction: column; gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- URGENCY BAR -->
+<div class="urgency-bar">
+  🔴 Chỉ còn <span id="slotsLeft">vài</span> chỗ / 20 &nbsp;·&nbsp; Đăng ký đóng <span>22:00 ngày 09/04/2026</span>
+</div>
+
+<div class="page-fade">
+
+<nav>
+  <div class="container" style="display:flex;align-items:center;justify-content:space-between;width:100%;">
+    <a href="index.html" class="nav-brand">Thầy Mã Thiên</a>
+    <a href="#dang-ky" class="nav-cta">Đăng ký →</a>
+  </div>
+</nav>
+
+<main>
+
+  <!-- ── HERO ── -->
+  <div class="container">
+    <section class="hero">
+      <p class="hero-meta">Khóa Thực Hành Online · Zoom · Sĩ Số 20 Người</p>
+      <h1 class="hero-title">
+        Ba Ngày Sống Trong<br/>
+        <em>Tánh Biết</em>
+        <span class="small-line">Bất Sinh · Bất Diệt</span>
+      </h1>
+      <p class="hero-sub">
+        Không phải khóa học lý thuyết.<br/>
+        Đây là không gian thực hành trực tiếp — mỗi buổi sáng, bạn tự THẤY Tánh Biết là gì.
+      </p>
+      <div class="meta-pills">
+        <span class="pill">📅 10 · 11 · 12 tháng 4, 2026</span>
+        <span class="pill">⏰ 5:30 — 6:30 sáng</span>
+        <span class="pill">🎓 Thầy Mã Thiên</span>
+      </div>
+      <a href="#dang-ky" class="btn-hero">Đăng Ký Giữ Chỗ Ngay</a>
+      <p class="hero-note">1.000.000 VND · Tối đa 20 học viên</p>
+    </section>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── PAIN ── -->
+  <div class="container">
+    <section>
+      <p class="section-label">Bạn có đang ở đây không?</p>
+      <h2 class="section-title">Những điều<br/><em>không ai nói ra</em></h2>
+      <div class="pain-list">
+        <div class="pain-item">
+          <span class="pain-x">◻</span>
+          <p class="pain-text">Thiền nhiều năm nhưng vẫn bị cảm xúc kéo lê — giận vẫn giận, lo vẫn lo</p>
+        </div>
+        <div class="pain-item">
+          <span class="pain-x">◻</span>
+          <p class="pain-text">Thành công bên ngoài — nhưng bên trong trống rỗng một cách lạ lùng</p>
+        </div>
+        <div class="pain-item">
+          <span class="pain-x">◻</span>
+          <p class="pain-text">Biết mình cần bình an — nhưng không biết thật sự bình an trông như thế nào</p>
+        </div>
+        <div class="pain-item">
+          <span class="pain-x">◻</span>
+          <p class="pain-text">Mệt mỏi với "cố gắng ổn" — dù đã cố rất lâu rồi</p>
+        </div>
+      </div>
+      <div class="pain-closing">
+        Nếu có ít nhất 1 điều trên — đây là dấu hiệu bạn đang tìm đúng chỗ.
+      </div>
+    </section>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── INSIGHT ── -->
+  <div class="container">
+    <section class="insight-section">
+      <p class="insight-quote reveal">
+        Khổ không nằm ở sự kiện.<br/>
+        Khổ nằm ở <em>sự bám chấp</em> vào sự kiện.
+      </p>
+
+      <p class="reveal" style="font-size:0.95rem;color:var(--muted);max-width:520px;margin:0 auto 48px;line-height:1.9;">
+        Và bên dưới mọi cảm xúc, mọi suy nghĩ — có một cái gì đó luôn hiện diện, không bao giờ bị tổn thương. Nó không sinh ra khi bạn vui. Không chết đi khi bạn buồn.
+      </p>
+
+      <div class="tanh-biet-box">
+        <span class="tanh-biet-word">Tánh Biết</span>
+        <p class="tanh-biet-desc">
+          Đó là "cái đang biết" — luôn hiện diện trong mọi khoảnh khắc.<br/>
+          Không bị cảm xúc làm hại. Không bị hoàn cảnh lay chuyển.<br/>
+          <strong>Bất sinh — bất diệt.<br/>Và bạn có thể trực tiếp trải nghiệm nó — không phải chỉ hiểu về nó.</strong>
+        </p>
+      </div>
+    </section>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── COURSE INFO ── -->
+  <div class="container">
+    <section>
+      <p class="section-label">Chi tiết khóa học</p>
+      <h2 class="section-title">Ba Ngày<br/><em>Thực Hành Trực Tiếp</em></h2>
+      <div class="course-grid">
+        <div class="course-card">
+          <div class="card-icon">📅</div>
+          <div class="card-label">Thời gian</div>
+          <div class="card-value">10 · 11 · 12<br/>tháng 4, 2026</div>
+        </div>
+        <div class="course-card">
+          <div class="card-icon">⏰</div>
+          <div class="card-label">Giờ học</div>
+          <div class="card-value">5:30 — 6:30<br/>sáng mỗi ngày</div>
+        </div>
+        <div class="course-card">
+          <div class="card-icon">💻</div>
+          <div class="card-label">Hình thức</div>
+          <div class="card-value">Online · Zoom</div>
+          <div class="card-sub">Không cần di chuyển</div>
+        </div>
+        <div class="course-card">
+          <div class="card-icon">👥</div>
+          <div class="card-label">Sĩ số</div>
+          <div class="card-value">Tối đa<br/>20 học viên</div>
+        </div>
+        <div class="course-card highlight">
+          <div class="card-label">Học phí</div>
+          <div class="card-value price">1.000.000 VND</div>
+          <div class="card-sub">Dành cho 3 buổi thực hành · Chỉ 20 chỗ</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── 5 GIÁ TRỊ ── -->
+  <div class="container">
+    <section>
+      <p class="section-label">Những gì bạn nhận được</p>
+      <h2 class="section-title">5 Điều Xảy Ra<br/><em>Trong 3 Buổi Sáng</em></h2>
+      <div class="values-list">
+        <div class="value-item">
+          <span class="value-num">01</span>
+          <div class="value-body">
+            <h3 class="value-title">Thoát khỏi gốc rễ khổ đau</h3>
+            <p class="value-desc">Không phải thoát khỏi cảm xúc — mà thấy rõ cảm xúc không phải là bạn. Bạn không còn bị kéo bởi chúng.</p>
+          </div>
+        </div>
+        <div class="value-item">
+          <span class="value-num">02</span>
+          <div class="value-body">
+            <h3 class="value-title">Trực nhận Tánh Biết</h3>
+            <p class="value-desc">Trực tiếp trải nghiệm "cái đang biết" — thứ chưa từng sinh, chưa từng diệt. Không phải khái niệm. Không phải niềm tin. Mà là THẤY.</p>
+          </div>
+        </div>
+        <div class="value-item">
+          <span class="value-num">03</span>
+          <div class="value-body">
+            <h3 class="value-title">Làm chủ cảm xúc mà không cần kiểm soát</h3>
+            <p class="value-desc">Giận vẫn đến → nhưng không làm hại bạn. Buồn vẫn có → nhưng không nhấn chìm bạn. Bạn thấy cảm xúc — thay vì bị cảm xúc điều khiển.</p>
+          </div>
+        </div>
+        <div class="value-item">
+          <span class="value-num">04</span>
+          <div class="value-body">
+            <h3 class="value-title">Sống tỉnh thức trong từng khoảnh khắc</h3>
+            <p class="value-desc">Quay về trạng thái "biết" trong từng hành động nhỏ nhất. Bắt đầu sống thật — không phải sống vô thức trên autopilot.</p>
+          </div>
+        </div>
+        <div class="value-item">
+          <span class="value-num">05</span>
+          <div class="value-body">
+            <h3 class="value-title">Nền tảng cho hành trình tiếp theo</h3>
+            <p class="value-desc">Dù bạn học thiền, tâm lý học, hay bất kỳ pháp môn nào — Tánh Biết là nền tảng giúp mọi thứ "click" vào đúng chỗ.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── DÀNH CHO AI ── -->
+  <div class="container">
+    <section>
+      <p class="section-label">Khóa học này dành cho</p>
+      <h2 class="section-title">Bạn Sẽ Thấy<br/><em>Mình Ở Đây</em></h2>
+      <div class="for-who-list">
+        <div class="for-item">
+          <span class="for-check">✦</span>
+          <p class="for-text">Bạn đang khổ vì cảm xúc — stress, lo âu, dễ giận, dễ tổn thương, cảm thấy nặng nề</p>
+        </div>
+        <div class="for-item">
+          <span class="for-check">✦</span>
+          <p class="for-text">Bạn thành công nhưng vẫn trống rỗng — có tiền, có vị trí, nhưng thiếu bình an thật sự</p>
+        </div>
+        <div class="for-item">
+          <span class="for-check">✦</span>
+          <p class="for-text">Bạn đang trên hành trình tâm linh — đã thiền, đọc sách, học nhiều pháp — nhưng vẫn còn tìm kiếm</p>
+        </div>
+        <div class="for-item">
+          <span class="for-check">✦</span>
+          <p class="for-text">Bạn muốn thực hành thật sự — không phải nghe lý thuyết thêm</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── TEACHER ── -->
+  <div class="container">
+    <section class="teacher-section reveal">
+      <div class="teacher-portrait">馬</div>
+      <h2 class="teacher-name-title">Thầy Mã Thiên</h2>
+      <p class="teacher-sub">Trần Phi Hùng · Master Coach</p>
+      <p class="teacher-body">
+        Thầy Mã Thiên là người kết hợp thiền truyền thống với huyền học Đông-Tây (Tâm số học, Kinh Dịch, Tử vi, Tarot) trong một framework coaching chuyên nghiệp — điều chưa ai làm tại Việt Nam.<br/><br/>
+        Nhiều năm thực hành và chia sẻ, Thầy đã đồng hành cùng hàng trăm học viên trên hành trình khám phá Tánh Biết và tìm lại bình an thật sự.
+      </p>
+      <blockquote class="teacher-quote">
+        Tôi không dạy bạn về Tánh Biết. Tôi dẫn bạn đến chỗ bạn tự THẤY nó.
+      </blockquote>
+    </section>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── FAQ ── -->
+  <div class="container">
+    <section>
+      <p class="section-label">Những câu hỏi thường gặp</p>
+      <h2 class="section-title">Trước Khi<br/><em>Bạn Đăng Ký</em></h2>
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">
+            Tôi chưa bao giờ thiền trước đây — có được không?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-a">Hoàn toàn được. Thực ra, người chưa có thói quen thiền đôi khi tiến bộ nhanh hơn vì không có "thói quen cũ" cần phá bỏ. Thầy sẽ dẫn dắt từng bước.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">
+            5:30 sáng có hơi sớm không?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-a">Buổi sáng sớm là thời điểm tâm trí trong sáng nhất — trước khi bị ngày mới kéo đi. Đó là lý do Thầy chọn khung giờ này. Nhiều học viên nói đây là lý do họ thích buổi học hơn mọi thứ khác trong ngày.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">
+            Học online thì có hiệu quả như offline không?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-a">Tánh Biết không phụ thuộc vào không gian vật lý. Điều quan trọng là sự hiện diện của bạn — không phải địa điểm. Nhiều học viên online nói họ dễ tập trung hơn vì không cần di chuyển.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">
+            Nếu bỏ lỡ 1 buổi thì sao?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-a">Mỗi buổi là một thực hành độc lập. Tuy nhiên, 3 buổi liên tiếp tạo momentum tốt nhất — hãy ưu tiên tham gia đủ cả 3 buổi.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">
+            Học phí có hoàn lại không?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-a">Vì sĩ số giới hạn 20 người, chỗ của bạn sẽ dành riêng cho bạn khi đăng ký. Không hoàn phí sau khi xác nhận — nhưng có thể chuyển nhượng cho người khác nếu có việc bận.</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── CTA FINAL ── -->
+  <div class="container">
+    <section class="cta-section reveal" id="dang-ky">
+      <h2 class="cta-title">Sẵn Sàng Cho<br/>3 Buổi Sáng Thay Đổi?</h2>
+      <p class="cta-sub">Chỉ 20 chỗ · Khóa học bắt đầu 5:30 sáng, ngày 10/04/2026</p>
+      <a href="https://forms.gle/LINK_FORM_CUA_BAN" class="btn-cta" target="_blank" rel="noopener">
+        Đăng Ký Giữ Chỗ Ngay
+        <span class="cta-price">1.000.000 VND / người</span>
+      </a>
+      <p class="cta-meta">
+        Sau khi đăng ký → Nhắn tin Zalo <strong>[SĐT Thầy]</strong> để xác nhận chỗ<br/>
+        Đăng ký đóng lúc 22:00 ngày 09/04/2026
+      </p>
+
+      <div class="payment-info">
+        <p class="payment-title">Hình thức thanh toán</p>
+        <div class="payment-methods">
+          <span class="payment-badge">Chuyển khoản ngân hàng</span>
+          <span class="payment-badge">MoMo</span>
+          <span class="payment-badge">ZaloPay</span>
+        </div>
+        <p class="payment-note">
+          Số tài khoản: <strong>MB Bank Trần Phi Hùng 8277141315</strong><br/>
+          Sau khi chuyển khoản → Nhắn tin Zalo <strong>0862432728</strong> kèm bill để xác nhận chỗ.
+        </p>
+      </div>
+    </section>
+
+    <!-- LEAD MAGNET STRIP -->
+    <div class="lead-strip reveal">
+      <div class="lead-strip-icon">🎧</div>
+      <div class="lead-strip-body">
+        <h3 class="lead-strip-title">Chưa sẵn sàng đăng ký?</h3>
+        <p class="lead-strip-sub">Nhận video thiền miễn phí 15 phút trước — để tự trải nghiệm trước khi quyết định.</p>
+        <a href="index.html" class="btn-outline">Nhận Video Miễn Phí →</a>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <div class="container">
+    <p class="footer-text">
+      © 2026 Thầy Mã Thiên · Trần Phi Hùng<br/>
+      <a href="index.html">← Video Thiền Miễn Phí</a> &nbsp;·&nbsp; <a href="mailto:">Liên hệ</a>
+    </p>
+  </div>
+</footer>
+
+</div><!-- /page-fade -->
+
+<script>
+  // Intersection Observer
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll(
+    '.pain-item, .pain-closing, .reveal, .course-card, .value-item, .for-item, .faq-item, .insight-quote, .tanh-biet-box, .flow-step'
+  ).forEach(el => io.observe(el));
+
+  // FAQ accordion
+  document.querySelectorAll('.faq-q').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const item = this.closest('.faq-item');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    });
+  });
+</script>
+</body>
+</html>

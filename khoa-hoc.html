@@ -27,8 +27,6 @@
 
     html {
       scroll-behavior: smooth;
-      overflow-x: clip;
-      height: 100%;
     }
 
     body {
@@ -37,10 +35,7 @@
       font-family: 'Be Vietnam Pro', sans-serif;
       font-weight: 300;
       line-height: 1.8;
-      overflow-x: clip;
-      width: 100%;
-      min-height: 100%;
-      position: relative;
+      overflow-x: hidden;
     }
 
     /* Grain — absolute tránh iOS layout shift */
@@ -218,10 +213,7 @@
       gap: 16px;
       padding: 18px 0;
       border-bottom: 1px solid var(--border);
-      opacity: 0; transform: translateY(12px);
-      transition: opacity 0.5s ease, transform 0.5s ease;
     }
-    .pain-item.visible { opacity: 1; transform: none; }
     .pain-x { color: var(--gold-dim); font-size: 1rem; line-height: 1.8; flex-shrink: 0; }
     .pain-text { font-size: 0.95rem; color: var(--warm-white); }
 
@@ -234,10 +226,7 @@
       font-size: 0.92rem;
       color: var(--gold-light);
       font-style: italic;
-      opacity: 0; transform: translateY(12px);
-      transition: opacity 0.6s ease 0.3s, transform 0.6s ease 0.3s;
     }
-    .pain-closing.visible { opacity: 1; transform: none; }
 
     /* ── INSIGHT ── */
     .insight-section { text-align: center; }
@@ -248,10 +237,7 @@
       line-height: 1.45;
       color: var(--warm-white);
       margin-bottom: 40px;
-      opacity: 0;
-      transition: opacity 0.8s ease;
     }
-    .insight-quote.visible { opacity: 1; }
     .insight-quote em { font-style: italic; color: var(--gold); }
 
     .tanh-biet-box {
@@ -260,10 +246,7 @@
       border-radius: 12px;
       padding: 48px 36px;
       margin-top: 40px;
-      opacity: 0; transform: translateY(20px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
     }
-    .tanh-biet-box.visible { opacity: 1; transform: none; }
     .tanh-biet-word {
       font-family: 'Cormorant Garamond', serif;
       font-size: 3rem;
@@ -288,10 +271,7 @@
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 28px 24px;
-      opacity: 0; transform: translateY(16px);
-      transition: opacity 0.5s ease, transform 0.5s ease;
     }
-    .course-card.visible { opacity: 1; transform: none; }
     .course-card.highlight {
       border-color: var(--gold-dim);
       background: var(--surface-3);
@@ -310,10 +290,7 @@
       gap: 24px;
       padding: 32px 0;
       border-bottom: 1px solid var(--border);
-      opacity: 0; transform: translateX(-12px);
-      transition: opacity 0.5s ease, transform 0.5s ease;
     }
-    .value-item.visible { opacity: 1; transform: none; }
     .value-item:last-child { border-bottom: none; }
     .value-num {
       font-family: 'Cormorant Garamond', serif;
@@ -342,10 +319,7 @@
       gap: 14px;
       padding: 16px 0;
       border-bottom: 1px solid var(--border);
-      opacity: 0; transform: translateY(10px);
-      transition: opacity 0.4s ease, transform 0.4s ease;
     }
-    .for-item.visible { opacity: 1; transform: none; }
     .for-item:last-child { border-bottom: none; }
     .for-check { color: var(--gold); font-size: 0.9rem; line-height: 1.8; flex-shrink: 0; }
     .for-text { font-size: 0.95rem; }
@@ -396,10 +370,7 @@
     .faq-list { margin-top: 40px; }
     .faq-item {
       border-bottom: 1px solid var(--border);
-      opacity: 0; transform: translateY(10px);
-      transition: opacity 0.4s ease, transform 0.4s ease;
     }
-    .faq-item.visible { opacity: 1; transform: none; }
     .faq-q {
       width: 100%;
       background: none;
@@ -542,8 +513,7 @@
     .footer-text a { color: var(--gold-dim); text-decoration: none; }
 
     /* ── SCROLL REVEAL WRAPPER ── */
-    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
-    .reveal.visible { opacity: 1; transform: none; }
+    /* .reveal — animation removed, always visible */
 
     /* ── PAGE FADE ── */
     .page-fade { opacity: 0; animation: pageIn 0.8s ease 0.1s forwards; }
@@ -557,9 +527,9 @@
     }
 
     /* ── GLOBAL OVERFLOW GUARD ── */
-    html, body { max-width: 100vw !important; overflow-x: clip !important; }
-    .page-fade, main, nav, footer, .container { max-width: 100%; overflow-x: clip; }
-    [class*="ml-"] { max-width: 100% !important; box-sizing: border-box !important; overflow-x: hidden !important; }
+    /* Dùng hidden thay clip để iOS Safari IntersectionObserver hoạt động */
+    html, body { max-width: 100vw; overflow-x: hidden; }
+    [class*="ml-"] { max-width: 100% !important; box-sizing: border-box !important; }
   </style>
 
   <!-- ═══════════════════════════════════════════════
@@ -1060,21 +1030,7 @@
     });
   }
 
-  // ═══════════════════════════════════════════════════════════
-  // SCROLL REVEAL — Intersection Observer
-  // ═══════════════════════════════════════════════════════════
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((entry, i) => {
-      if (entry.isIntersecting) {
-        setTimeout(() => entry.target.classList.add('visible'), i * 80);
-        io.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.08 });
-
-  document.querySelectorAll(
-    '.pain-item, .pain-closing, .reveal, .course-card, .value-item, .for-item, .faq-item, .insight-quote, .tanh-biet-box, .flow-step'
-  ).forEach(el => io.observe(el));
+  // IntersectionObserver removed — content always visible on iOS
 
   // ── FAQ accordion ──
   document.querySelectorAll('.faq-q').forEach(btn => {

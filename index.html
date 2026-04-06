@@ -401,24 +401,8 @@
     }
     @keyframes pageIn { to { opacity: 1; } }
 
-    /* ── HIDE MAILERLITE DUPLICATE BUTTON ── */
-    /* MailerLite renders an extra icon-only button row — hide it */
-    .ml-form-embedBody .ml-form-embedSubmit + .ml-form-embedSubmit,
-    .ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody
-      .ml-form-embedSubmit button.loading {
-      display: none !important;
-    }
-    /* Target the arrow/icon ghost button specifically */
-    .ml-form-embedBody .ml-form-embedSubmit button[style*="background"],
-    .ml-form-embedBody .ml-form-fieldRow:last-of-type + div button:not([type="submit"]) {
-      display: none !important;
-    }
-    /* Safer: hide any submit-area button that only contains an icon (no text) */
-    .ml-form-embedSubmit button:empty,
-    .ml-form-embedSubmit button svg:only-child,
-    .ml-form-embedSubmit:nth-of-type(2) {
-      display: none !important;
-    }
+    /* ── MAILERLITE: chỉ ẩn loading state, không ẩn submit button ── */
+    .ml-form-embedSubmit button.loading { display: none !important; }
 
     /* ── MOBILE OPTIMISATIONS ── */
     @media (max-width: 520px) {
@@ -466,26 +450,25 @@
       footer { padding: 24px 0; }
       .footer-text { font-size: 0.75rem; }
 
-      /* MailerLite inputs bigger touch target on mobile */
-      .ml-form-embedBody input[type="text"],
-      .ml-form-embedBody input[type="email"],
-      .ml-form-embedBody input[type="tel"] {
-        font-size: 1rem !important; /* prevent iOS auto-zoom on focus */
-        padding: 15px 16px !important;
-      }
-      .ml-form-embedBody .ml-form-embedSubmit button,
-      .ml-form-embedBody button[type="submit"] {
-        font-size: 1rem !important;
-        padding: 16px 20px !important;
-      }
-    }
-
-    /* iOS font-size zoom prevention (inputs < 16px trigger zoom) */
-    @media (max-width: 768px) {
+      /* MailerLite mobile — 16px mandatory, larger touch targets */
       .ml-form-embedBody input[type="text"],
       .ml-form-embedBody input[type="email"],
       .ml-form-embedBody input[type="tel"] {
         font-size: 16px !important;
+        padding: 15px 16px !important;
+        min-height: 50px !important;
+        -webkit-appearance: none !important;
+        appearance: none !important;
+      }
+      .ml-form-embedBody .ml-form-embedSubmit button[type="submit"] {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        font-size: 1rem !important;
+        min-height: 52px !important;
+        padding: 16px 20px !important;
+        -webkit-appearance: none !important;
+        appearance: none !important;
       }
     }
 
@@ -544,30 +527,36 @@
       font-family: 'Be Vietnam Pro', sans-serif !important;
       font-weight: 300 !important;
     }
-    /* Submit button */
-    .ml-form-embedBody .ml-form-embedSubmit button,
+    /* Submit button — luôn hiện, không bao giờ bị ẩn */
+    .ml-form-embedBody .ml-form-embedSubmit button[type="submit"],
     .ml-form-embedBody button[type="submit"] {
       display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
       width: 100% !important;
+      min-height: 52px !important;
       background: #c9a96e !important;
       color: #0d0d0d !important;
       border: none !important;
       border-radius: 8px !important;
-      padding: 17px 24px !important;
+      padding: 16px 24px !important;
       font-family: 'Be Vietnam Pro', sans-serif !important;
-      font-size: 0.95rem !important;
+      font-size: 1rem !important;
       font-weight: 500 !important;
-      letter-spacing: 0.05em !important;
+      letter-spacing: 0.04em !important;
       cursor: pointer !important;
       margin-top: 8px !important;
-      transition: all 0.3s ease !important;
+      text-align: center !important;
+      -webkit-appearance: none !important;
+      appearance: none !important;
       box-shadow: none !important;
+      transition: background 0.3s ease !important;
     }
-    .ml-form-embedBody .ml-form-embedSubmit button:hover,
-    .ml-form-embedBody button[type="submit"]:hover {
+    .ml-form-embedBody .ml-form-embedSubmit button[type="submit"]:hover {
       background: #e8d5b0 !important;
-      transform: translateY(-1px) !important;
-      box-shadow: 0 8px 32px rgba(201,169,110,0.3) !important;
+    }
+    .ml-form-embedBody .ml-form-embedSubmit button[type="submit"]:active {
+      transform: scale(0.98) !important;
     }
     /* Success message */
     /* ── Success state — fix link color + prevent overflow scroll ── */

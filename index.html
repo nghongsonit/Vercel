@@ -306,9 +306,10 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: center 20%;
+      object-position: center 25%; /* crop vào mặt, ảnh dọc */
       border-radius: 50%;
       display: block;
+      background: var(--surface-2); /* fallback nếu ảnh chưa load */
     }
     .teacher-info { flex: 1; }
     .teacher-name {

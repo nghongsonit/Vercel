@@ -355,16 +355,6 @@
       font-size: 3rem;
       color: var(--gold);
       margin: 0 auto 28px;
-      overflow: hidden;
-    }
-    .teacher-portrait img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center 25%; /* crop vào mặt, ảnh dọc */
-      border-radius: 50%;
-      display: block;
-      background: var(--surface-2);
     }
     .teacher-name-title {
       font-family: 'Cormorant Garamond', serif;
@@ -545,8 +535,8 @@
     .footer-text a { color: var(--gold-dim); text-decoration: none; }
 
     /* ── SCROLL REVEAL WRAPPER ── */
-    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; will-change: opacity, transform; }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
 
     /* ── PAGE FADE ── */
     .page-fade { opacity: 0; animation: pageIn 0.8s ease 0.1s forwards; }
@@ -788,7 +778,7 @@
   <!-- ── TEACHER ── -->
   <div class="container">
     <section class="teacher-section reveal">
-      <div class="teacher-portrait"><img src="mathien.jpg" alt="Thầy Mã Thiên" /></div>
+      <div class="teacher-portrait">馬</div>
       <h2 class="teacher-name-title">Thầy Mã Thiên</h2>
       <p class="teacher-sub">Trần Phi Hùng · Master Coach</p>
       <p class="teacher-body">
@@ -896,14 +886,14 @@
   <div class="container">
     <p class="footer-text">
       © 2026 Thầy Mã Thiên · Trần Phi Hùng<br/>
-      <a href="index.html">← Video Thiền Miễn Phí</a> &nbsp;·&nbsp; <a href="/cdn-cgi/l/email-protection#36">Liên hệ</a>
+      <a href="index.html">← Video Thiền Miễn Phí</a> &nbsp;·&nbsp; <a href="mailto:">Liên hệ</a>
     </p>
   </div>
 </footer>
 
 </div><!-- /page-fade -->
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
   // ═══════════════════════════════════════════════════════════
   // TRACKING LAYER 1 — UTM Passthrough vào Google Form
   // Đọc utm_campaign từ URL → gắn vào link Google Form
@@ -1091,4 +1081,9 @@
     initCTAButtons();      // Layer 1: UTM passthrough
     initSlotCounter();     // Layer 2: Slot counter
     initCTATracking();     // Layer 3: GA4 CTA click
-    initScrol
+    initScrollTracking();  // Layer 3: GA4 scroll depth
+    initTimeTracking();    // Layer 3: GA4 time on page
+  });
+</script>
+</body>
+</html>

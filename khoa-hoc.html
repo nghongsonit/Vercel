@@ -25,10 +25,8 @@
       --border-strong: rgba(201,169,110,0.3);
     }
 
-    html {
-      scroll-behavior: smooth;
-    }
-
+    /* ── BASE — overflow:hidden CHỈ trên body, không trên containers ── */
+    html { scroll-behavior: smooth; }
     body {
       background: var(--ink);
       color: var(--warm-white);
@@ -36,37 +34,48 @@
       font-weight: 300;
       line-height: 1.8;
       overflow-x: hidden;
+      /* KHÔNG position:relative — tránh tạo stacking context */
     }
 
-    /* Grain — absolute tránh iOS layout shift */
+    /* Grain — position:fixed với pointer-events:none, không ảnh hưởng layout */
     body::before {
       content: '';
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+      position: fixed;
+      inset: 0;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
       pointer-events: none;
       z-index: 0;
+      /* fixed không gây scroll ngang vì không trong flow */
     }
 
-    .container { max-width: 700px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 0 20px;
+      position: relative;
+      z-index: 1;
+    }
 
-    /* ── URGENCY BAR ── */
+    /* ── URGENCY BAR — sticky scroll theo trang ── */
     .urgency-bar {
-      background: rgba(13,9,7,0.95);
+      background: rgba(10,9,7,0.97);
       border-bottom: 1px solid var(--border);
-      padding: 10px 24px;
+      padding: 10px 20px;
       text-align: center;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       color: var(--gold-light);
-      letter-spacing: 0.05em;
-      position: sticky; top: 0; z-index: 100;
+      letter-spacing: 0.04em;
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      /* KHÔNG backdrop-filter — gây stacking context iOS */
+      width: 100%;
     }
     .urgency-bar span { color: var(--gold); font-weight: 500; }
 
     /* ── NAV ── */
     nav {
-      padding: 28px 0;
+      padding: 24px 0;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -74,7 +83,7 @@
     .nav-brand {
       font-family: 'Cormorant Garamond', serif;
       font-size: 0.82rem;
-      letter-spacing: 0.18em;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
       color: var(--gold);
       text-decoration: none;
@@ -89,71 +98,58 @@
 
     /* ── HERO ── */
     .hero {
-      padding: 72px 0 64px;
+      padding: 64px 0 56px;
       text-align: center;
-      position: relative;
     }
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 50%; transform: translateX(-50%);
-      width: 100%; max-width: 400px; height: 400px;
-      background: radial-gradient(ellipse at center, rgba(201,169,110,0.06) 0%, transparent 70%);
-      pointer-events: none;
-    }
+    /* KHÔNG dùng ::before với width cố định — gây scroll ngang */
 
     .hero-meta {
-      font-size: 0.75rem;
-      letter-spacing: 0.22em;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--gold-dim);
-      margin-bottom: 40px;
+      margin-bottom: 36px;
     }
-
     .hero-title {
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(2.4rem, 7vw, 4rem);
+      font-size: clamp(2.2rem, 7vw, 3.8rem);
       font-weight: 400;
       line-height: 1.2;
       color: var(--warm-white);
       margin-bottom: 20px;
     }
-    .hero-title em {
-      font-style: italic;
-      color: var(--gold);
-    }
+    .hero-title em { font-style: italic; color: var(--gold); }
     .hero-title .small-line {
       display: block;
-      font-size: 0.55em;
+      font-size: 0.52em;
       letter-spacing: 0.1em;
       color: var(--gold-dim);
       margin-top: 8px;
       font-style: normal;
     }
-
     .hero-sub {
-      font-size: 1rem;
+      font-size: 0.95rem;
       color: var(--muted);
-      max-width: 440px;
-      margin: 0 auto 48px;
+      max-width: 420px;
+      margin: 0 auto 44px;
       line-height: 1.85;
     }
+    @media (max-width: 480px) { .hero-sub br { display: none; } }
 
     .meta-pills {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 8px;
       justify-content: center;
-      margin-bottom: 52px;
+      margin-bottom: 44px;
     }
     .pill {
       background: rgba(201,169,110,0.08);
       border: 1px solid var(--border);
       border-radius: 100px;
-      padding: 7px 18px;
-      font-size: 0.8rem;
+      padding: 6px 14px;
+      font-size: 0.78rem;
       color: var(--gold-light);
-      letter-spacing: 0.03em;
     }
 
     .btn-hero {
@@ -161,43 +157,33 @@
       background: var(--gold);
       color: var(--ink);
       text-decoration: none;
-      padding: 17px 42px;
+      padding: 16px 36px;
       border-radius: 8px;
       font-weight: 500;
       font-size: 0.95rem;
       letter-spacing: 0.04em;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
+      transition: background 0.3s ease, transform 0.2s ease;
+      -webkit-appearance: none;
     }
-    .btn-hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 60%);
-    }
-    .btn-hero:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 12px 40px rgba(201,169,110,0.3); }
+    .btn-hero:hover { background: var(--gold-light); transform: translateY(-1px); }
+    .hero-note { font-size: 0.78rem; color: var(--muted); margin-top: 14px; }
 
-    .hero-note { font-size: 0.8rem; color: var(--muted); margin-top: 16px; }
-
-    /* ── SECTION COMMON ── */
-    section { padding: 72px 0; }
+    /* ── SECTIONS ── */
+    section { padding: 64px 0; }
     .divider {
       height: 1px;
       background: linear-gradient(90deg, transparent, var(--border), transparent);
-      margin: 0;
     }
-
     .section-label {
-      font-size: 0.72rem;
-      letter-spacing: 0.24em;
+      font-size: 0.7rem;
+      letter-spacing: 0.22em;
       text-transform: uppercase;
       color: var(--gold-dim);
-      margin-bottom: 40px;
+      margin-bottom: 36px;
     }
     .section-title {
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(1.7rem, 4vw, 2.4rem);
+      font-size: clamp(1.6rem, 4vw, 2.3rem);
       font-weight: 400;
       line-height: 1.3;
       color: var(--warm-white);
@@ -205,335 +191,376 @@
     }
     .section-title em { font-style: italic; color: var(--gold); }
 
-    /* ── PAIN SECTION ── */
-    .pain-list { margin-top: 40px; }
+    /* ── PAIN ── */
+    .pain-list { margin-top: 36px; }
     .pain-item {
       display: flex;
       align-items: flex-start;
-      gap: 16px;
-      padding: 18px 0;
+      gap: 14px;
+      padding: 16px 0;
       border-bottom: 1px solid var(--border);
+      /* Animation CSS thuần — không cần JS */
+      animation: fadeUp 0.5s ease both;
     }
+    .pain-item:nth-child(1) { animation-delay: 0.1s; }
+    .pain-item:nth-child(2) { animation-delay: 0.2s; }
+    .pain-item:nth-child(3) { animation-delay: 0.3s; }
+    .pain-item:nth-child(4) { animation-delay: 0.4s; }
     .pain-x { color: var(--gold-dim); font-size: 1rem; line-height: 1.8; flex-shrink: 0; }
-    .pain-text { font-size: 0.95rem; color: var(--warm-white); }
-
+    .pain-text { font-size: 0.93rem; color: var(--warm-white); }
     .pain-closing {
-      margin-top: 36px;
-      padding: 24px 28px;
+      margin-top: 32px;
+      padding: 20px 24px;
       background: rgba(201,169,110,0.05);
       border-left: 2px solid var(--gold-dim);
       border-radius: 0 8px 8px 0;
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       color: var(--gold-light);
       font-style: italic;
+      animation: fadeUp 0.5s ease 0.5s both;
     }
 
     /* ── INSIGHT ── */
     .insight-section { text-align: center; }
     .insight-quote {
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(1.5rem, 4vw, 2.2rem);
+      font-size: clamp(1.4rem, 4vw, 2.1rem);
       font-weight: 400;
       line-height: 1.45;
       color: var(--warm-white);
-      margin-bottom: 40px;
+      margin-bottom: 36px;
+      animation: fadeUp 0.6s ease 0.1s both;
     }
     .insight-quote em { font-style: italic; color: var(--gold); }
-
+    .insight-body {
+      font-size: 0.93rem;
+      color: var(--muted);
+      max-width: 480px;
+      margin: 0 auto 40px;
+      line-height: 1.9;
+      animation: fadeUp 0.6s ease 0.2s both;
+    }
     .tanh-biet-box {
       background: var(--surface-2);
       border: 1px solid var(--border-strong);
       border-radius: 12px;
-      padding: 48px 36px;
-      margin-top: 40px;
+      padding: 40px 28px;
+      margin-top: 36px;
+      animation: fadeUp 0.6s ease 0.3s both;
     }
     .tanh-biet-word {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 3rem;
+      font-size: 2.8rem;
       font-weight: 300;
       color: var(--gold);
       letter-spacing: 0.08em;
       display: block;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
-    .tanh-biet-desc { font-size: 0.95rem; color: var(--muted); line-height: 2; }
-    .tanh-biet-desc strong { color: var(--warm-white); display: block; margin-top: 12px; font-weight: 400; font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-style: italic; }
+    .tanh-biet-desc { font-size: 0.93rem; color: var(--muted); line-height: 2; }
+    .tanh-biet-desc strong {
+      color: var(--warm-white);
+      display: block;
+      margin-top: 12px;
+      font-weight: 400;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      font-style: italic;
+    }
 
-    /* ── KHÓA HỌC INFO ── */
+    /* ── COURSE GRID ── */
     .course-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin: 40px 0;
+      gap: 12px;
+      margin: 36px 0;
     }
     .course-card {
       background: var(--surface-2);
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 28px 24px;
+      padding: 24px 20px;
+      animation: fadeUp 0.5s ease both;
     }
+    .course-card:nth-child(1) { animation-delay: 0.1s; }
+    .course-card:nth-child(2) { animation-delay: 0.2s; }
+    .course-card:nth-child(3) { animation-delay: 0.15s; }
+    .course-card:nth-child(4) { animation-delay: 0.25s; }
     .course-card.highlight {
       border-color: var(--gold-dim);
       background: var(--surface-3);
       grid-column: 1 / -1;
+      animation-delay: 0.3s;
     }
-    .card-icon { font-size: 1.4rem; margin-bottom: 12px; }
-    .card-label { font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
-    .card-value { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 400; color: var(--warm-white); line-height: 1.3; }
-    .card-value.price { color: var(--gold); font-size: 2rem; }
-    .card-sub { font-size: 0.8rem; color: var(--muted); margin-top: 4px; }
+    .card-icon { font-size: 1.3rem; margin-bottom: 10px; }
+    .card-label { font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+    .card-value { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 400; color: var(--warm-white); line-height: 1.3; }
+    .card-value.price { color: var(--gold); font-size: 1.9rem; }
+    .card-sub { font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
 
-    /* ── 5 GIÁ TRỊ ── */
-    .values-list { margin-top: 40px; display: flex; flex-direction: column; gap: 0; }
+    /* ── VALUES ── */
+    .values-list { margin-top: 36px; }
     .value-item {
       display: flex;
-      gap: 24px;
-      padding: 32px 0;
+      gap: 20px;
+      padding: 28px 0;
       border-bottom: 1px solid var(--border);
+      animation: fadeLeft 0.5s ease both;
     }
+    .value-item:nth-child(1) { animation-delay: 0.05s; }
+    .value-item:nth-child(2) { animation-delay: 0.12s; }
+    .value-item:nth-child(3) { animation-delay: 0.19s; }
+    .value-item:nth-child(4) { animation-delay: 0.26s; }
+    .value-item:nth-child(5) { animation-delay: 0.33s; }
     .value-item:last-child { border-bottom: none; }
     .value-num {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 2.5rem;
+      font-size: 2.2rem;
       font-weight: 300;
       color: rgba(201,169,110,0.2);
       line-height: 1;
-      min-width: 48px;
+      min-width: 44px;
       padding-top: 4px;
+      flex-shrink: 0;
     }
-    .value-body { flex: 1; }
+    .value-body { flex: 1; min-width: 0; }
     .value-title {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 1.25rem;
+      font-size: 1.2rem;
       font-weight: 400;
       color: var(--gold-light);
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
-    .value-desc { font-size: 0.9rem; color: var(--muted); line-height: 1.8; }
+    .value-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.8; }
 
-    /* ── DÀNH CHO AI ── */
-    .for-who-list { margin-top: 40px; }
+    /* ── FOR WHO ── */
+    .for-who-list { margin-top: 36px; }
     .for-item {
       display: flex;
       align-items: flex-start;
-      gap: 14px;
-      padding: 16px 0;
+      gap: 12px;
+      padding: 14px 0;
       border-bottom: 1px solid var(--border);
+      animation: fadeUp 0.4s ease both;
     }
+    .for-item:nth-child(1) { animation-delay: 0.05s; }
+    .for-item:nth-child(2) { animation-delay: 0.12s; }
+    .for-item:nth-child(3) { animation-delay: 0.19s; }
+    .for-item:nth-child(4) { animation-delay: 0.26s; }
     .for-item:last-child { border-bottom: none; }
-    .for-check { color: var(--gold); font-size: 0.9rem; line-height: 1.8; flex-shrink: 0; }
-    .for-text { font-size: 0.95rem; }
+    .for-check { color: var(--gold); font-size: 0.88rem; line-height: 1.8; flex-shrink: 0; }
+    .for-text { font-size: 0.93rem; line-height: 1.7; }
 
     /* ── TEACHER ── */
-    .teacher-section { text-align: center; }
+    .teacher-section { text-align: center; animation: fadeUp 0.6s ease 0.1s both; }
     .teacher-portrait {
-      width: 120px; height: 120px;
+      width: 110px; height: 110px;
       border-radius: 50%;
       border: 2px solid var(--border-strong);
       background: var(--surface-2);
       display: flex; align-items: center; justify-content: center;
       font-family: 'Cormorant Garamond', serif;
-      font-size: 3rem;
+      font-size: 2.8rem;
       color: var(--gold);
-      margin: 0 auto 28px;
+      margin: 0 auto 24px;
+      overflow: hidden;
+    }
+    .teacher-portrait img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center 25%;
+      border-radius: 50%; display: block;
     }
     .teacher-name-title {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 1.8rem;
+      font-size: 1.7rem;
       color: var(--warm-white);
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
-    .teacher-sub { font-size: 0.85rem; color: var(--gold-dim); letter-spacing: 0.08em; margin-bottom: 32px; }
-    .teacher-body { font-size: 0.92rem; color: var(--muted); line-height: 2; max-width: 520px; margin: 0 auto 32px; }
+    .teacher-sub { font-size: 0.82rem; color: var(--gold-dim); letter-spacing: 0.08em; margin-bottom: 28px; }
+    .teacher-body { font-size: 0.9rem; color: var(--muted); line-height: 2; max-width: 500px; margin: 0 auto 28px; }
     .teacher-quote {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       font-style: italic;
       color: var(--gold-light);
-      padding: 28px 32px;
+      padding: 24px 28px 24px 36px;
       border: 1px solid var(--border);
       border-radius: 12px;
       background: var(--surface-2);
       position: relative;
+      text-align: left;
     }
     .teacher-quote::before {
       content: '"';
       position: absolute;
-      top: -20px; left: 24px;
-      font-size: 4rem;
+      top: -16px; left: 20px;
+      font-size: 3.5rem;
       color: var(--gold-dim);
       font-family: 'Cormorant Garamond', serif;
       line-height: 1;
     }
 
-    /* ── FAQ ── */
-    .faq-list { margin-top: 40px; }
-    .faq-item {
-      border-bottom: 1px solid var(--border);
-    }
+    /* ── FAQ — Pure CSS accordion ── */
+    .faq-list { margin-top: 36px; }
+    .faq-item { border-bottom: 1px solid var(--border); }
     .faq-q {
       width: 100%;
       background: none;
       border: none;
       color: var(--warm-white);
       font-family: 'Be Vietnam Pro', sans-serif;
-      font-size: 0.95rem;
+      font-size: 0.93rem;
       font-weight: 400;
       text-align: left;
-      padding: 24px 0;
+      padding: 22px 0;
       cursor: pointer;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
       transition: color 0.2s;
+      -webkit-tap-highlight-color: transparent;
     }
-    .faq-q:hover { color: var(--gold); }
+    .faq-q:hover, .faq-q:focus { color: var(--gold); outline: none; }
     .faq-icon {
       color: var(--gold-dim);
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       flex-shrink: 0;
-      transition: transform 0.3s ease;
+      transition: transform 0.3s ease, color 0.2s;
+      line-height: 1;
     }
     .faq-item.open .faq-icon { transform: rotate(45deg); color: var(--gold); }
     .faq-a {
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       color: var(--muted);
-      line-height: 1.9;
+      line-height: 1.85;
       max-height: 0;
       overflow: hidden;
-      transition: max-height 0.4s ease, padding 0.3s ease;
+      transition: max-height 0.4s ease, padding-bottom 0.3s ease;
       padding-bottom: 0;
     }
-    .faq-item.open .faq-a { max-height: 300px; padding-bottom: 28px; }
+    .faq-item.open .faq-a { max-height: 400px; padding-bottom: 24px; }
 
-    /* ── CTA FINAL ── */
-    .cta-section {
-      text-align: center;
-      padding: 80px 0 72px;
-      position: relative;
-    }
-    .cta-section::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 50%; transform: translateX(-50%);
-      width: 100%; max-width: 500px; height: 300px;
-      background: radial-gradient(ellipse at center, rgba(201,169,110,0.07) 0%, transparent 70%);
-      pointer-events: none;
-    }
+    /* ── CTA ── */
+    .cta-section { text-align: center; padding: 72px 0 64px; }
     .cta-title {
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      font-size: clamp(1.7rem, 5vw, 2.6rem);
       font-weight: 400;
       color: var(--warm-white);
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       line-height: 1.3;
     }
-    .cta-sub { font-size: 0.95rem; color: var(--muted); margin-bottom: 48px; }
+    .cta-sub { font-size: 0.92rem; color: var(--muted); margin-bottom: 40px; }
     .btn-cta {
       display: inline-block;
       background: var(--gold);
       color: var(--ink);
       text-decoration: none;
-      padding: 20px 52px;
+      padding: 18px 44px;
       border-radius: 8px;
       font-weight: 500;
-      font-size: 1rem;
+      font-size: 0.97rem;
       letter-spacing: 0.04em;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-      margin-bottom: 20px;
+      transition: background 0.3s ease, transform 0.2s ease;
+      -webkit-appearance: none;
+      margin-bottom: 18px;
     }
-    .btn-cta::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 60%);
-    }
-    .btn-cta:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 16px 48px rgba(201,169,110,0.35); }
-    .cta-price { display: block; font-size: 0.85rem; color: var(--muted); margin-top: 4px; }
-    .cta-meta { font-size: 0.8rem; color: var(--muted); margin-top: 24px; line-height: 2; }
+    .btn-cta:hover { background: var(--gold-light); transform: translateY(-1px); }
+    .cta-price { display: block; font-size: 0.82rem; color: var(--muted); margin-top: 4px; }
+    .cta-meta { font-size: 0.78rem; color: var(--muted); margin-top: 20px; line-height: 2; }
 
     .payment-info {
-      margin-top: 40px;
-      padding: 28px 32px;
+      margin-top: 36px;
+      padding: 24px 28px;
       background: var(--surface-2);
       border: 1px solid var(--border);
       border-radius: 12px;
       text-align: left;
     }
-    .payment-title { font-size: 0.78rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
-    .payment-methods { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+    .payment-title { font-size: 0.74rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+    .payment-methods { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
     .payment-badge {
       background: rgba(201,169,110,0.08);
       border: 1px solid var(--border);
       border-radius: 6px;
-      padding: 6px 14px;
-      font-size: 0.8rem;
+      padding: 5px 12px;
+      font-size: 0.78rem;
       color: var(--gold-light);
     }
-    .payment-note { font-size: 0.85rem; color: var(--muted); line-height: 1.8; }
+    .payment-note { font-size: 0.83rem; color: var(--muted); line-height: 1.8; }
     .payment-note strong { color: var(--warm-white); font-weight: 400; }
 
-    /* ── LEAD MAGNET STRIP ── */
+    /* ── LEAD STRIP ── */
     .lead-strip {
       background: var(--surface-2);
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 40px 36px;
+      padding: 32px 28px;
       display: flex;
-      gap: 28px;
+      gap: 20px;
       align-items: center;
-      margin-bottom: 72px;
+      margin-bottom: 64px;
     }
-    .lead-strip-icon { font-size: 2.5rem; flex-shrink: 0; }
-    .lead-strip-body { flex: 1; }
-    .lead-strip-title { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: var(--warm-white); margin-bottom: 6px; }
-    .lead-strip-sub { font-size: 0.85rem; color: var(--muted); margin-bottom: 16px; }
+    .lead-strip-icon { font-size: 2rem; flex-shrink: 0; }
+    .lead-strip-body { flex: 1; min-width: 0; }
+    .lead-strip-title { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; color: var(--warm-white); margin-bottom: 6px; }
+    .lead-strip-sub { font-size: 0.82rem; color: var(--muted); margin-bottom: 14px; line-height: 1.6; }
     .btn-outline {
       display: inline-block;
       border: 1px solid var(--gold-dim);
       color: var(--gold);
       text-decoration: none;
-      padding: 10px 24px;
+      padding: 9px 20px;
       border-radius: 6px;
-      font-size: 0.85rem;
-      transition: all 0.2s ease;
+      font-size: 0.82rem;
+      transition: background 0.2s;
     }
     .btn-outline:hover { background: rgba(201,169,110,0.08); }
 
     /* ── FOOTER ── */
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 36px 0;
-      text-align: center;
-    }
-    .footer-text { font-size: 0.78rem; color: var(--muted); line-height: 2; }
+    footer { border-top: 1px solid var(--border); padding: 32px 0; text-align: center; }
+    .footer-text { font-size: 0.76rem; color: var(--muted); line-height: 2; }
     .footer-text a { color: var(--gold-dim); text-decoration: none; }
 
-    /* ── SCROLL REVEAL WRAPPER ── */
-    /* .reveal — animation removed, always visible */
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeLeft {
+      from { opacity: 0; transform: translateX(-10px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes pageIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    .page-fade { animation: pageIn 0.7s ease forwards; }
 
-    /* ── PAGE FADE ── */
-    .page-fade { opacity: 0; animation: pageIn 0.8s ease 0.1s forwards; }
-    @keyframes pageIn { to { opacity: 1; } }
-
+    /* ── MOBILE ── */
     @media (max-width: 560px) {
+      .container { padding: 0 16px; }
+      nav { padding: 18px 0; }
+      .hero { padding: 48px 0 40px; }
+      .hero-title { font-size: clamp(2rem, 8vw, 3rem); }
+      section { padding: 48px 0; }
       .course-grid { grid-template-columns: 1fr; }
       .course-card.highlight { grid-column: auto; }
+      .value-item { gap: 14px; padding: 22px 0; }
+      .value-num { font-size: 1.8rem; min-width: 36px; }
       .lead-strip { flex-direction: column; text-align: center; }
-      nav { flex-direction: column; gap: 12px; }
+      nav { flex-direction: column; gap: 10px; text-align: center; }
+      .payment-info { padding: 20px 16px; }
+      .btn-cta { padding: 16px 32px; font-size: 0.93rem; }
+      .tanh-biet-box { padding: 28px 20px; }
     }
 
-    /* ── GLOBAL OVERFLOW GUARD ── */
-    html, body { max-width: 100vw; overflow-x: hidden; }
-    /* Tất cả pseudo-elements absolute không được tạo scroll ngang */
-    *::before, *::after { max-width: 100vw; box-sizing: border-box; }
-    /* Container constraints */
-    .container, main, section, .page-fade { max-width: 100%; }
-    [class*="ml-"] { max-width: 100% !important; box-sizing: border-box !important; }
+    /* ── SAFE OVERFLOW — body level saja ── */
+    body { overflow-x: hidden; }
+    /* Jangan pakai overflow:hidden pada container/section */
   </style>
+
 
   <!-- ═══════════════════════════════════════════════
        TRACKING LAYER 3: Google Analytics 4
@@ -625,12 +652,12 @@
   <!-- ── INSIGHT ── -->
   <div class="container">
     <section class="insight-section">
-      <p class="insight-quote reveal">
+      <p class="insight-quote">
         Khổ không nằm ở sự kiện.<br/>
         Khổ nằm ở <em>sự bám chấp</em> vào sự kiện.
       </p>
 
-      <p class="reveal" style="font-size:0.95rem;color:var(--muted);max-width:520px;margin:0 auto 48px;line-height:1.9;">
+      <p class="insight-body">
         Và bên dưới mọi cảm xúc, mọi suy nghĩ — có một cái gì đó luôn hiện diện, không bao giờ bị tổn thương. Nó không sinh ra khi bạn vui. Không chết đi khi bạn buồn.
       </p>
 
@@ -762,7 +789,7 @@
 
   <!-- ── TEACHER ── -->
   <div class="container">
-    <section class="teacher-section reveal">
+    <section class="teacher-section">
       <div class="teacher-portrait">馬</div>
       <h2 class="teacher-name-title">Thầy Mã Thiên</h2>
       <p class="teacher-sub">Trần Phi Hùng · Master Coach</p>
@@ -827,7 +854,7 @@
 
   <!-- ── CTA FINAL ── -->
   <div class="container">
-    <section class="cta-section reveal" id="dang-ky">
+    <section class="cta-section" id="dang-ky">
       <h2 class="cta-title">Sẵn Sàng Cho<br/>3 Buổi Sáng Thay Đổi?</h2>
       <p class="cta-sub">Chỉ 20 chỗ · Khóa học bắt đầu 5:30 sáng, ngày 10/04/2026</p>
       <!-- id="ctaBtn" để JS gắn UTM vào href trước khi user click -->
@@ -853,7 +880,7 @@
     </section>
 
     <!-- LEAD MAGNET STRIP -->
-    <div class="lead-strip reveal">
+    <div class="lead-strip">
       <div class="lead-strip-icon">🎧</div>
       <div class="lead-strip-body">
         <h3 class="lead-strip-title">Chưa sẵn sàng đăng ký?</h3>
@@ -877,179 +904,74 @@
 </div><!-- /page-fade -->
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-  // ═══════════════════════════════════════════════════════════
-  // TRACKING LAYER 1 — UTM Passthrough vào Google Form
-  // Đọc utm_campaign từ URL → gắn vào link Google Form
-  // → khi user submit Form 2, Sheet tự có cột UTM
-  // ═══════════════════════════════════════════════════════════
-
+  // ── UTM passthrough ──
   const GOOGLE_FORM_BASE = 'https://docs.google.com/forms/d/e/1FAIpQLSefmZPteZQsw0xgogKI231gmghtFjrHgKM2wx5EBqFtBxiD-w/viewform';
-
-  // Cấu hình: entry ID của hidden field UTM trong Google Form của bạn
-  // Cách lấy entry ID: xem hướng dẫn trong comment bên dưới
-  const UTM_ENTRY_ID = 'entry.1434789090'; // utm_campaign field
+  const UTM_ENTRY_ID = 'entry.1434789090';
 
   function getUTM() {
-    const params = new URLSearchParams(window.location.search);
-    return {
-      campaign : params.get('utm_campaign') || 'direct',
-      source   : params.get('utm_source')   || '',
-      medium   : params.get('utm_medium')   || '',
-    };
+    const p = new URLSearchParams(window.location.search);
+    return p.get('utm_campaign') || 'direct';
   }
 
-  function buildFormURL() {
-    const utm = getUTM();
-    return `${GOOGLE_FORM_BASE}?usp=pp_url&${UTM_ENTRY_ID}=${encodeURIComponent(utm.campaign)}`;
-  }
-
-  // Gắn UTM URL vào tất cả CTA button
   function initCTAButtons() {
-    const formURL = buildFormURL();
-    document.querySelectorAll('#ctaBtn, .btn-cta-secondary').forEach(btn => {
-      btn.href = formURL;
-    });
+    const url = `${GOOGLE_FORM_BASE}?usp=pp_url&${UTM_ENTRY_ID}=${encodeURIComponent(getUTM())}`;
+    document.querySelectorAll('#ctaBtn, .btn-cta-secondary').forEach(btn => btn.href = url);
   }
 
-  // ═══════════════════════════════════════════════════════════
-  // TRACKING LAYER 2 — Slot Counter (Social Proof + Urgency)
-  // Đọc số đăng ký từ Google Sheet (public JSON endpoint)
-  // Cập nhật real-time khi có người đăng ký mới
-  // ═══════════════════════════════════════════════════════════
-
+  // ── Slot counter ──
   const TOTAL_SLOTS = 20;
+  const MANUAL_REGISTERED = 0; // ← cập nhật hàng ngày
 
-  // Cách 1 (ĐƠN GIẢN): Set thủ công — cập nhật mỗi ngày
-  // Thay số bên dưới mỗi khi có đăng ký mới
-  const MANUAL_REGISTERED = 0; // ← CẬP NHẬT THỦ CÔNG HÀNG NGÀY
-
-  // Cách 2 (TỰ ĐỘNG): Đọc từ Google Sheet public
-  // Uncomment khi đã setup Sheet public (xem hướng dẫn bên dưới)
-  /*
-  async function fetchSlotCount() {
-    // Sheet ID lấy từ URL Google Sheet của bạn
-    const SHEET_ID = 'YOUR_GOOGLE_SHEET_ID';
-    const SHEET_NAME = 'Sheet1'; // tên tab trong Sheet
-    // API endpoint đọc số row (= số đăng ký)
-    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}&tq=SELECT COUNT(A)`;
-    try {
-      const res = await fetch(url);
-      const text = await res.text();
-      // Google trả về JSONP — cần parse
-      const json = JSON.parse(text.substring(47).slice(0, -2));
-      const count = json.table.rows[0].c[0].v || 0;
-      return parseInt(count);
-    } catch(e) {
-      return MANUAL_REGISTERED; // fallback về số thủ công
-    }
-  }
-  */
-
-  function updateSlotDisplay(registered) {
-    const remaining = Math.max(0, TOTAL_SLOTS - registered);
+  function initSlotCounter() {
+    const remaining = Math.max(0, TOTAL_SLOTS - MANUAL_REGISTERED);
     const el = document.getElementById('slotsLeft');
-    if (!el) return;
-
-    el.textContent = remaining;
-
-    // Đổi màu urgency bar theo số chỗ còn lại
-    const bar = document.getElementById('urgencyBar');
-    if (!bar) return;
-    if (remaining <= 3) {
-      bar.style.background = 'rgba(180, 60, 60, 0.2)'; // đỏ — gần đầy
-      bar.style.borderBottomColor = 'rgba(180,60,60,0.4)';
-    } else if (remaining <= 8) {
-      bar.style.background = 'rgba(180, 120, 40, 0.15)'; // cam — còn ít
-    }
-    // Nếu hết chỗ — ẩn nút đăng ký, hiện thông báo
+    if (el) el.textContent = remaining;
     if (remaining === 0) {
-      document.querySelectorAll('#ctaBtn, .btn-cta-secondary').forEach(btn => {
-        btn.style.pointerEvents = 'none';
+      document.querySelectorAll('#ctaBtn').forEach(btn => {
         btn.style.opacity = '0.5';
+        btn.style.pointerEvents = 'none';
         btn.textContent = 'Đã Hết Chỗ';
       });
     }
   }
 
-  async function initSlotCounter() {
-    // Dùng Cách 1 (thủ công) — comment block này và uncomment Cách 2 nếu muốn tự động
-    updateSlotDisplay(MANUAL_REGISTERED);
-
-    // Cách 2 tự động:
-    // const count = await fetchSlotCount();
-    // updateSlotDisplay(count);
+  // ── GA4 ──
+  function trackEvent(name, params) {
+    if (typeof gtag !== 'undefined') gtag('event', name, { utm_campaign: getUTM(), ...params });
   }
 
-  // ═══════════════════════════════════════════════════════════
-  // TRACKING LAYER 3 — GA4 Event Tracking
-  // Track hành vi người dùng: click CTA, scroll depth, thời gian
-  // Xem data tại: analytics.google.com → Reports → Events
-  // ═══════════════════════════════════════════════════════════
-
-  function trackEvent(eventName, params = {}) {
-    if (typeof gtag !== 'undefined') {
-      gtag('event', eventName, {
-        ...params,
-        utm_campaign: getUTM().campaign,
-        page_location: window.location.href,
-      });
-    }
-  }
-
-  // Track click vào nút đăng ký
-  function initCTATracking() {
-    document.querySelectorAll('#ctaBtn, .btn-cta-secondary').forEach(btn => {
-      btn.addEventListener('click', () => {
-        trackEvent('cta_click', {
-          button_location: btn.id || 'cta_section',
-          utm_campaign: getUTM().campaign,
-        });
-      });
-    });
-  }
-
-  // Track scroll depth (25%, 50%, 75%, 100%)
-  function initScrollTracking() {
-    const depths = [25, 50, 75, 100];
-    const tracked = new Set();
-
-    window.addEventListener('scroll', () => {
-      const scrolled = (window.scrollY + window.innerHeight) / document.body.scrollHeight * 100;
-      depths.forEach(d => {
-        if (scrolled >= d && !tracked.has(d)) {
-          tracked.add(d);
-          trackEvent('scroll_depth', { depth: d });
-        }
-      });
-    }, { passive: true });
-  }
-
-  // Track thời gian trên trang (30s, 60s, 120s)
-  function initTimeTracking() {
-    [30, 60, 120].forEach(secs => {
-      setTimeout(() => {
-        trackEvent('time_on_page', { seconds: secs });
-      }, secs * 1000);
-    });
-  }
-
-  // ── INIT ALL ──
-  document.addEventListener('DOMContentLoaded', () => {
-    initCTAButtons();
-    initSlotCounter();
-    initCTATracking();
-    initScrollTracking();
-    initTimeTracking();
-
-    // FAQ accordion — inside DOMContentLoaded so elements exist
+  // ── FAQ accordion ──
+  function initFAQ() {
     document.querySelectorAll('.faq-q').forEach(btn => {
       btn.addEventListener('click', function() {
         const item = this.closest('.faq-item');
         const isOpen = item.classList.contains('open');
-        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+        document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
         if (!isOpen) item.classList.add('open');
       });
     });
+  }
+
+  // ── Init ──
+  document.addEventListener('DOMContentLoaded', () => {
+    initCTAButtons();
+    initSlotCounter();
+    initFAQ();
+
+    // CTA click tracking
+    document.querySelectorAll('#ctaBtn').forEach(btn => {
+      btn.addEventListener('click', () => trackEvent('cta_click', { location: 'cta_section' }));
+    });
+
+    // Scroll depth tracking
+    const depths = [25, 50, 75, 100];
+    const tracked = new Set();
+    window.addEventListener('scroll', () => {
+      const pct = (window.scrollY + window.innerHeight) / document.body.scrollHeight * 100;
+      depths.forEach(d => {
+        if (pct >= d && !tracked.has(d)) { tracked.add(d); trackEvent('scroll_depth', { depth: d }); }
+      });
+    }, { passive: true });
   });
 </script>
 </body>

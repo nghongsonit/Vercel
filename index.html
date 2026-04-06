@@ -181,8 +181,7 @@
       text-align: center;
       margin-bottom: 64px;
       position: relative;
-      overflow: hidden; /* clip decoration */
-      /* Prevent success content from pushing card wider */
+      overflow: hidden;
       width: 100%;
       max-width: 100%;
       box-sizing: border-box;
@@ -301,6 +300,15 @@
       font-size: 1.6rem;
       color: var(--gold);
       flex-shrink: 0;
+      overflow: hidden;
+    }
+    .teacher-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 20%;
+      border-radius: 50%;
+      display: block;
     }
     .teacher-info { flex: 1; }
     .teacher-name {
@@ -401,24 +409,8 @@
     }
     @keyframes pageIn { to { opacity: 1; } }
 
-    /* ── HIDE MAILERLITE DUPLICATE BUTTON ── */
-    /* MailerLite renders an extra icon-only button row — hide it */
-    .ml-form-embedBody .ml-form-embedSubmit + .ml-form-embedSubmit,
-    .ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody
-      .ml-form-embedSubmit button.loading {
-      display: none !important;
-    }
-    /* Target the arrow/icon ghost button specifically */
-    .ml-form-embedBody .ml-form-embedSubmit button[style*="background"],
-    .ml-form-embedBody .ml-form-fieldRow:last-of-type + div button:not([type="submit"]) {
-      display: none !important;
-    }
-    /* Safer: hide any submit-area button that only contains an icon (no text) */
-    .ml-form-embedSubmit button:empty,
-    .ml-form-embedSubmit button svg:only-child,
-    .ml-form-embedSubmit:nth-of-type(2) {
-      display: none !important;
-    }
+    /* ── MAILERLITE: only hide loading spinner, never the real button ── */
+    .ml-form-embedSubmit button.loading { display: none !important; }
 
     /* ── MOBILE OPTIMISATIONS ── */
     @media (max-width: 520px) {
@@ -440,7 +432,7 @@
       .benefit-text { font-size: 0.9rem; }
 
       /* Form card */
-      .form-section { padding: 32px 20px; border-radius: 12px; margin-bottom: 48px; overflow: hidden; }
+      .form-section { padding: 32px 20px; border-radius: 12px; margin-bottom: 48px; }
       .form-title { font-size: 1.4rem; }
       .form-note { font-size: 0.82rem; margin-bottom: 28px; }
       .form-privacy { font-size: 0.75rem; }
@@ -466,31 +458,34 @@
       footer { padding: 24px 0; }
       .footer-text { font-size: 0.75rem; }
 
-      /* MailerLite inputs bigger touch target on mobile */
-      .ml-form-embedBody input[type="text"],
-      .ml-form-embedBody input[type="email"],
-      .ml-form-embedBody input[type="tel"] {
-        font-size: 1rem !important; /* prevent iOS auto-zoom on focus */
-        padding: 15px 16px !important;
-      }
-      .ml-form-embedBody .ml-form-embedSubmit button,
-      .ml-form-embedBody button[type="submit"] {
-        font-size: 1rem !important;
-        padding: 16px 20px !important;
-      }
-    }
-
-    /* iOS font-size zoom prevention (inputs < 16px trigger zoom) */
-    @media (max-width: 768px) {
+      /* MailerLite mobile — 16px mandatory, larger touch targets */
       .ml-form-embedBody input[type="text"],
       .ml-form-embedBody input[type="email"],
       .ml-form-embedBody input[type="tel"] {
         font-size: 16px !important;
+        padding: 15px 16px !important;
+        min-height: 50px !important;
+        -webkit-appearance: none !important;
+        appearance: none !important;
+      }
+      .ml-form-embedBody .ml-form-embedSubmit button[type="submit"] {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        min-height: 52px !important;
+        font-size: 1rem !important;
+        padding: 16px 20px !important;
+        -webkit-appearance: none !important;
+        appearance: none !important;
       }
     }
 
-    /* ── MAILERLITE FORM OVERRIDES ── */
-    /* Reset MailerLite's default white/light theme to match our dark design */
+    /* ══════════════════════════════════════════
+       MAILERLITE OVERRIDES — v3 clean & tested
+       Desktop Chrome/Safari + iOS Safari + Android Chrome
+    ══════════════════════════════════════════ */
+
+    /* 1. Strip container chrome */
     #mlb2-PH4Q4K,
     .ml-form-embedContainer,
     .ml-form-embedWrapper,
@@ -501,76 +496,108 @@
       padding: 0 !important;
       margin: 0 !important;
       width: 100% !important;
+      max-width: 100% !important;
+      box-sizing: border-box !important;
     }
-    .ml-form-embedBody .ml-form-embedContent {
-      display: none !important; /* Hide ML default title/desc — we have our own */
+
+    /* 2. Hide ML's built-in title/desc */
+    .ml-form-embedBody .ml-form-embedContent,
+    .ml-form-embedBody .ml-form-embedContent h4,
+    .ml-form-embedBody .ml-form-embedContent p {
+      display: none !important;
     }
+
+    /* 3. Field rows */
     .ml-form-embedBody .ml-form-fieldRow {
       padding: 0 !important;
-      margin-bottom: 14px !important;
+      margin: 0 0 14px 0 !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
     }
+
+    /* 4. Inputs — dark theme, 16px prevents iOS zoom */
     .ml-form-embedBody input[type="text"],
     .ml-form-embedBody input[type="email"],
     .ml-form-embedBody input[type="tel"] {
+      display: block !important;
+      width: 100% !important;
       background: rgba(255,255,255,0.04) !important;
       border: 1px solid rgba(201,169,110,0.18) !important;
       border-radius: 8px !important;
       padding: 14px 18px !important;
       color: #f5f0e8 !important;
       font-family: 'Be Vietnam Pro', sans-serif !important;
-      font-size: 0.95rem !important;
+      font-size: 16px !important;
       font-weight: 300 !important;
-      width: 100% !important;
+      line-height: 1.5 !important;
       box-shadow: none !important;
       outline: none !important;
+      -webkit-appearance: none !important;
+      appearance: none !important;
+      box-sizing: border-box !important;
       transition: border-color 0.3s ease, background 0.3s ease !important;
     }
-    .ml-form-embedBody input[type="text"]:focus,
-    .ml-form-embedBody input[type="email"]:focus,
-    .ml-form-embedBody input[type="tel"]:focus {
+    .ml-form-embedBody input:focus {
       border-color: #8a6d3b !important;
       background: rgba(201,169,110,0.06) !important;
     }
     .ml-form-embedBody input::placeholder {
-      color: rgba(122,112,96,0.6) !important;
+      color: rgba(122,112,96,0.5) !important;
     }
+
+    /* 5. Labels */
     .ml-form-embedBody label {
       display: block !important;
-      font-size: 0.78rem !important;
+      font-size: 0.75rem !important;
       letter-spacing: 0.1em !important;
       text-transform: uppercase !important;
       color: #7a7060 !important;
-      margin-bottom: 8px !important;
+      margin: 0 0 8px 0 !important;
       font-family: 'Be Vietnam Pro', sans-serif !important;
       font-weight: 300 !important;
     }
-    /* Submit button */
-    .ml-form-embedBody .ml-form-embedSubmit button,
+
+    /* 6. Submit wrapper */
+    .ml-form-embedBody .ml-form-embedSubmit {
+      width: 100% !important;
+      padding: 0 !important;
+      margin: 16px 0 0 0 !important;
+      box-sizing: border-box !important;
+    }
+
+    /* 7. Submit button — always visible, never hidden */
+    .ml-form-embedBody .ml-form-embedSubmit button[type="submit"],
     .ml-form-embedBody button[type="submit"] {
       display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
       width: 100% !important;
+      min-height: 52px !important;
       background: #c9a96e !important;
       color: #0d0d0d !important;
       border: none !important;
       border-radius: 8px !important;
-      padding: 17px 24px !important;
+      padding: 16px 24px !important;
       font-family: 'Be Vietnam Pro', sans-serif !important;
-      font-size: 0.95rem !important;
+      font-size: 1rem !important;
       font-weight: 500 !important;
-      letter-spacing: 0.05em !important;
+      letter-spacing: 0.04em !important;
       cursor: pointer !important;
-      margin-top: 8px !important;
-      transition: all 0.3s ease !important;
+      text-align: center !important;
+      -webkit-appearance: none !important;
+      appearance: none !important;
       box-shadow: none !important;
+      box-sizing: border-box !important;
+      transition: background 0.3s ease !important;
     }
-    .ml-form-embedBody .ml-form-embedSubmit button:hover,
-    .ml-form-embedBody button[type="submit"]:hover {
+    .ml-form-embedBody .ml-form-embedSubmit button[type="submit"]:hover {
       background: #e8d5b0 !important;
-      transform: translateY(-1px) !important;
-      box-shadow: 0 8px 32px rgba(201,169,110,0.3) !important;
     }
-    /* Success message */
-    /* ── Success state — fix link color + prevent overflow scroll ── */
+    .ml-form-embedBody .ml-form-embedSubmit button[type="submit"]:active {
+      transform: scale(0.98) !important;
+    }
+
+    /* 8. Success state — fix link color + overflow scroll */
     .ml-form-successBody {
       background: transparent !important;
       text-align: left !important;
@@ -606,7 +633,7 @@
       overflow-wrap: break-word !important;
       word-break: break-word !important;
     }
-    /* Fix: Zalo link và mọi link trong success message */
+    /* Fix Zalo link và mọi link trong success — không bị tối */
     .ml-form-successBody a,
     .ml-form-successBody p a,
     .ml-form-successContent a,
@@ -617,15 +644,11 @@
       word-break: break-all !important;
     }
     .ml-form-successBody a:hover,
-    .ml-form-successContent a:hover {
-      color: #e8d5b0 !important;
-    }
-    /* Hide ML noise */
+    .ml-form-successContent a:hover { color: #e8d5b0 !important; }
+
+    /* 9. Hide ML noise */
     .ml-form-embedBody .ml-form-checkboxRow,
-    .ml-form-recaptcha {
-      font-size: 0.75rem !important;
-      color: #7a7060 !important;
-    }
+    .ml-form-recaptcha { font-size: 0.75rem !important; color: #7a7060 !important; }
     .ml-subscribe-close { display: none !important; }
   </style>
 
@@ -704,7 +727,7 @@
 
     <!-- TEACHER -->
     <div class="teacher-strip">
-      <div class="teacher-avatar">馬</div>
+      <div class="teacher-avatar"><img src="mathien.jpg" alt="Thầy Mã Thiên" /></div>
       <div class="teacher-info">
         <p class="teacher-name">Thầy Mã Thiên (Trần Phi Hùng)</p>
         <p class="teacher-desc">Master Coach kết hợp thiền truyền thống với huyền học Đông-Tây. Hơn nhiều năm đồng hành cùng hàng trăm học viên trên hành trình khám phá Tánh Biết và tìm lại bình an thật sự.</p>

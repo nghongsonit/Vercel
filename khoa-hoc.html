@@ -549,12 +549,25 @@
       nav { flex-direction: column; gap: 12px; }
     }
   </style>
+
+  <!-- ═══════════════════════════════════════════════
+       TRACKING LAYER 3: Google Analytics 4
+       Thay G-XXXXXXXXXX bằng Measurement ID thật
+       Lấy tại: analytics.google.com → Admin → Data Streams
+  ════════════════════════════════════════════════ -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
 </head>
 <body>
 
-<!-- URGENCY BAR -->
-<div class="urgency-bar">
-  🔴 Chỉ còn <span id="slotsLeft">vài</span> chỗ / 20 &nbsp;·&nbsp; Đăng ký đóng <span>22:00 ngày 09/04/2026</span>
+<!-- URGENCY BAR — slot count driven by JS -->
+<div class="urgency-bar" id="urgencyBar">
+  🔴 Chỉ còn <span id="slotsLeft">...</span> chỗ / 20 &nbsp;·&nbsp; Đăng ký đóng <span>22:00 ngày 09/04/2026</span>
 </div>
 
 <div class="page-fade">
@@ -832,7 +845,8 @@
     <section class="cta-section reveal" id="dang-ky">
       <h2 class="cta-title">Sẵn Sàng Cho<br/>3 Buổi Sáng Thay Đổi?</h2>
       <p class="cta-sub">Chỉ 20 chỗ · Khóa học bắt đầu 5:30 sáng, ngày 10/04/2026</p>
-      <a href="https://forms.gle/LINK_FORM_CUA_BAN" class="btn-cta" target="_blank" rel="noopener">
+      <!-- id="ctaBtn" để JS gắn UTM vào href trước khi user click -->
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSefmZPteZQsw0xgogKI231gmghtFjrHgKM2wx5EBqFtBxiD-w/viewform" id="ctaBtn" class="btn-cta" target="_blank" rel="noopener">
         Đăng Ký Giữ Chỗ Ngay
         <span class="cta-price">1.000.000 VND / người</span>
       </a>
@@ -849,8 +863,8 @@
           <span class="payment-badge">ZaloPay</span>
         </div>
         <p class="payment-note">
-          Số tài khoản: <strong>MB Bank Trần Phi Hùng 8277141315</strong><br/>
-          Sau khi chuyển khoản → Nhắn tin Zalo <strong>0862432728</strong> kèm bill để xác nhận chỗ.
+          Số tài khoản: <strong>[Điền thông tin thanh toán]</strong><br/>
+          Sau khi chuyển khoản → Nhắn tin Zalo <strong>[SĐT]</strong> kèm bill để xác nhận chỗ.
         </p>
       </div>
     </section>
@@ -880,7 +894,165 @@
 </div><!-- /page-fade -->
 
 <script>
-  // Intersection Observer
+  // ═══════════════════════════════════════════════════════════
+  // TRACKING LAYER 1 — UTM Passthrough vào Google Form
+  // Đọc utm_campaign từ URL → gắn vào link Google Form
+  // → khi user submit Form 2, Sheet tự có cột UTM
+  // ═══════════════════════════════════════════════════════════
+
+  const GOOGLE_FORM_BASE = 'https://docs.google.com/forms/d/e/1FAIpQLSefmZPteZQsw0xgogKI231gmghtFjrHgKM2wx5EBqFtBxiD-w/viewform';
+
+  // Cấu hình: entry ID của hidden field UTM trong Google Form của bạn
+  // Cách lấy entry ID: xem hướng dẫn trong comment bên dưới
+  const UTM_ENTRY_ID = 'entry.1434789090'; // utm_campaign field
+
+  function getUTM() {
+    const params = new URLSearchParams(window.location.search);
+    return {
+      campaign : params.get('utm_campaign') || 'direct',
+      source   : params.get('utm_source')   || '',
+      medium   : params.get('utm_medium')   || '',
+    };
+  }
+
+  function buildFormURL() {
+    const utm = getUTM();
+    return `${GOOGLE_FORM_BASE}?usp=pp_url&${UTM_ENTRY_ID}=${encodeURIComponent(utm.campaign)}`;
+  }
+
+  // Gắn UTM URL vào tất cả CTA button
+  function initCTAButtons() {
+    const formURL = buildFormURL();
+    document.querySelectorAll('#ctaBtn, .btn-cta-secondary').forEach(btn => {
+      btn.href = formURL;
+    });
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  // TRACKING LAYER 2 — Slot Counter (Social Proof + Urgency)
+  // Đọc số đăng ký từ Google Sheet (public JSON endpoint)
+  // Cập nhật real-time khi có người đăng ký mới
+  // ═══════════════════════════════════════════════════════════
+
+  const TOTAL_SLOTS = 20;
+
+  // Cách 1 (ĐƠN GIẢN): Set thủ công — cập nhật mỗi ngày
+  // Thay số bên dưới mỗi khi có đăng ký mới
+  const MANUAL_REGISTERED = 0; // ← CẬP NHẬT THỦ CÔNG HÀNG NGÀY
+
+  // Cách 2 (TỰ ĐỘNG): Đọc từ Google Sheet public
+  // Uncomment khi đã setup Sheet public (xem hướng dẫn bên dưới)
+  /*
+  async function fetchSlotCount() {
+    // Sheet ID lấy từ URL Google Sheet của bạn
+    const SHEET_ID = 'YOUR_GOOGLE_SHEET_ID';
+    const SHEET_NAME = 'Sheet1'; // tên tab trong Sheet
+    // API endpoint đọc số row (= số đăng ký)
+    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}&tq=SELECT COUNT(A)`;
+    try {
+      const res = await fetch(url);
+      const text = await res.text();
+      // Google trả về JSONP — cần parse
+      const json = JSON.parse(text.substring(47).slice(0, -2));
+      const count = json.table.rows[0].c[0].v || 0;
+      return parseInt(count);
+    } catch(e) {
+      return MANUAL_REGISTERED; // fallback về số thủ công
+    }
+  }
+  */
+
+  function updateSlotDisplay(registered) {
+    const remaining = Math.max(0, TOTAL_SLOTS - registered);
+    const el = document.getElementById('slotsLeft');
+    if (!el) return;
+
+    el.textContent = remaining;
+
+    // Đổi màu urgency bar theo số chỗ còn lại
+    const bar = document.getElementById('urgencyBar');
+    if (!bar) return;
+    if (remaining <= 3) {
+      bar.style.background = 'rgba(180, 60, 60, 0.2)'; // đỏ — gần đầy
+      bar.style.borderBottomColor = 'rgba(180,60,60,0.4)';
+    } else if (remaining <= 8) {
+      bar.style.background = 'rgba(180, 120, 40, 0.15)'; // cam — còn ít
+    }
+    // Nếu hết chỗ — ẩn nút đăng ký, hiện thông báo
+    if (remaining === 0) {
+      document.querySelectorAll('#ctaBtn, .btn-cta-secondary').forEach(btn => {
+        btn.style.pointerEvents = 'none';
+        btn.style.opacity = '0.5';
+        btn.textContent = 'Đã Hết Chỗ';
+      });
+    }
+  }
+
+  async function initSlotCounter() {
+    // Dùng Cách 1 (thủ công) — comment block này và uncomment Cách 2 nếu muốn tự động
+    updateSlotDisplay(MANUAL_REGISTERED);
+
+    // Cách 2 tự động:
+    // const count = await fetchSlotCount();
+    // updateSlotDisplay(count);
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  // TRACKING LAYER 3 — GA4 Event Tracking
+  // Track hành vi người dùng: click CTA, scroll depth, thời gian
+  // Xem data tại: analytics.google.com → Reports → Events
+  // ═══════════════════════════════════════════════════════════
+
+  function trackEvent(eventName, params = {}) {
+    if (typeof gtag !== 'undefined') {
+      gtag('event', eventName, {
+        ...params,
+        utm_campaign: getUTM().campaign,
+        page_location: window.location.href,
+      });
+    }
+  }
+
+  // Track click vào nút đăng ký
+  function initCTATracking() {
+    document.querySelectorAll('#ctaBtn, .btn-cta-secondary').forEach(btn => {
+      btn.addEventListener('click', () => {
+        trackEvent('cta_click', {
+          button_location: btn.id || 'cta_section',
+          utm_campaign: getUTM().campaign,
+        });
+      });
+    });
+  }
+
+  // Track scroll depth (25%, 50%, 75%, 100%)
+  function initScrollTracking() {
+    const depths = [25, 50, 75, 100];
+    const tracked = new Set();
+
+    window.addEventListener('scroll', () => {
+      const scrolled = (window.scrollY + window.innerHeight) / document.body.scrollHeight * 100;
+      depths.forEach(d => {
+        if (scrolled >= d && !tracked.has(d)) {
+          tracked.add(d);
+          trackEvent('scroll_depth', { depth: d });
+        }
+      });
+    }, { passive: true });
+  }
+
+  // Track thời gian trên trang (30s, 60s, 120s)
+  function initTimeTracking() {
+    [30, 60, 120].forEach(secs => {
+      setTimeout(() => {
+        trackEvent('time_on_page', { seconds: secs });
+      }, secs * 1000);
+    });
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  // SCROLL REVEAL — Intersection Observer
+  // ═══════════════════════════════════════════════════════════
   const io = new IntersectionObserver((entries) => {
     entries.forEach((entry, i) => {
       if (entry.isIntersecting) {
@@ -894,7 +1066,7 @@
     '.pain-item, .pain-closing, .reveal, .course-card, .value-item, .for-item, .faq-item, .insight-quote, .tanh-biet-box, .flow-step'
   ).forEach(el => io.observe(el));
 
-  // FAQ accordion
+  // ── FAQ accordion ──
   document.querySelectorAll('.faq-q').forEach(btn => {
     btn.addEventListener('click', function() {
       const item = this.closest('.faq-item');
@@ -902,6 +1074,15 @@
       document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
       if (!isOpen) item.classList.add('open');
     });
+  });
+
+  // ── INIT ALL ──
+  document.addEventListener('DOMContentLoaded', () => {
+    initCTAButtons();      // Layer 1: UTM passthrough
+    initSlotCounter();     // Layer 2: Slot counter
+    initCTATracking();     // Layer 3: GA4 CTA click
+    initScrollTracking();  // Layer 3: GA4 scroll depth
+    initTimeTracking();    // Layer 3: GA4 time on page
   });
 </script>
 </body>

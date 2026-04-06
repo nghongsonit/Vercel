@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
   <title>Video Miễn Phí — Thiền Chuyển Hoá Cảm Xúc | Thầy Mã Thiên</title>
   <meta name="description" content="Nhận video miễn phí 15 phút: Thiền Chuyển Hoá Cảm Xúc Tiêu Cực — Nhận Ra Tánh Biết do Thầy Mã Thiên dẫn dắt trực tiếp." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -23,7 +23,10 @@
       --border: rgba(201,169,110,0.18);
     }
 
-    html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+      overflow-x: hidden; /* fix mobile horizontal scroll */
+    }
 
     body {
       background: var(--ink);
@@ -32,6 +35,9 @@
       font-weight: 300;
       line-height: 1.75;
       overflow-x: hidden;
+      width: 100%;
+      /* Prevent iOS momentum scroll causing layout shift */
+      -webkit-overflow-scrolling: touch;
     }
 
     /* Grain overlay */
@@ -64,25 +70,26 @@
 
     /* ── HERO ── */
     .hero {
-      padding: 80px 0 60px;
+      padding: 56px 0 48px;
       text-align: center;
     }
 
     .eyebrow {
       display: inline-block;
       font-size: 0.72rem;
-      letter-spacing: 0.25em;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--gold);
-      margin-bottom: 32px;
-      padding: 6px 18px;
+      margin-bottom: 28px;
+      padding: 6px 16px;
       border: 1px solid var(--border);
       border-radius: 100px;
+      white-space: nowrap;
     }
 
     .hero-title {
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(2.2rem, 6vw, 3.4rem);
+      font-size: clamp(2rem, 8vw, 3.4rem);
       font-weight: 400;
       line-height: 1.25;
       color: var(--warm-white);
@@ -95,11 +102,15 @@
     }
 
     .hero-subtitle {
-      font-size: 1rem;
+      font-size: 0.95rem;
       color: var(--muted);
       max-width: 480px;
-      margin: 0 auto 56px;
-      line-height: 1.8;
+      margin: 0 auto 48px;
+      line-height: 1.85;
+    }
+    /* Remove <br> effect on small screens */
+    @media (max-width: 480px) {
+      .hero-subtitle br { display: none; }
     }
 
     /* ── LOTUS DIVIDER ── */
@@ -379,9 +390,92 @@
     }
     @keyframes pageIn { to { opacity: 1; } }
 
+    /* ── HIDE MAILERLITE DUPLICATE BUTTON ── */
+    /* MailerLite renders an extra icon-only button row — hide it */
+    .ml-form-embedBody .ml-form-embedSubmit + .ml-form-embedSubmit,
+    .ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody
+      .ml-form-embedSubmit button.loading {
+      display: none !important;
+    }
+    /* Target the arrow/icon ghost button specifically */
+    .ml-form-embedBody .ml-form-embedSubmit button[style*="background"],
+    .ml-form-embedBody .ml-form-fieldRow:last-of-type + div button:not([type="submit"]) {
+      display: none !important;
+    }
+    /* Safer: hide any submit-area button that only contains an icon (no text) */
+    .ml-form-embedSubmit button:empty,
+    .ml-form-embedSubmit button svg:only-child,
+    .ml-form-embedSubmit:nth-of-type(2) {
+      display: none !important;
+    }
+
+    /* ── MOBILE OPTIMISATIONS ── */
     @media (max-width: 520px) {
-      .form-section { padding: 36px 24px; }
-      .teacher-strip { flex-direction: column; text-align: center; }
+      /* Container */
+      .container { padding: 0 20px; }
+
+      /* Nav */
+      nav { padding: 20px 0 16px; }
+      .nav-brand { font-size: 0.78rem; letter-spacing: 0.14em; }
+
+      /* Hero */
+      .hero { padding: 44px 0 36px; }
+      .eyebrow { font-size: 0.68rem; letter-spacing: 0.15em; padding: 5px 14px; }
+
+      /* Benefits */
+      .benefits { padding: 0 0 40px; }
+      .benefit-item { gap: 14px; padding: 16px 0; }
+      .benefit-num { font-size: 1.5rem; min-width: 28px; }
+      .benefit-text { font-size: 0.9rem; }
+
+      /* Form card */
+      .form-section { padding: 32px 20px; border-radius: 12px; margin-bottom: 48px; }
+      .form-title { font-size: 1.4rem; }
+      .form-note { font-size: 0.82rem; margin-bottom: 28px; }
+      .form-privacy { font-size: 0.75rem; }
+
+      /* Teacher */
+      .teacher-strip {
+        flex-direction: column;
+        text-align: center;
+        gap: 16px;
+        padding: 28px 0;
+        margin-bottom: 48px;
+      }
+      .teacher-desc { font-size: 0.82rem; }
+
+      /* Flow */
+      .flow-section { padding: 0 0 48px; }
+      .step-content { font-size: 0.88rem; }
+
+      /* CTA link */
+      .cta-link { font-size: 0.82rem; margin-bottom: 56px; }
+
+      /* Footer */
+      footer { padding: 24px 0; }
+      .footer-text { font-size: 0.75rem; }
+
+      /* MailerLite inputs bigger touch target on mobile */
+      .ml-form-embedBody input[type="text"],
+      .ml-form-embedBody input[type="email"],
+      .ml-form-embedBody input[type="tel"] {
+        font-size: 1rem !important; /* prevent iOS auto-zoom on focus */
+        padding: 15px 16px !important;
+      }
+      .ml-form-embedBody .ml-form-embedSubmit button,
+      .ml-form-embedBody button[type="submit"] {
+        font-size: 1rem !important;
+        padding: 16px 20px !important;
+      }
+    }
+
+    /* iOS font-size zoom prevention (inputs < 16px trigger zoom) */
+    @media (max-width: 768px) {
+      .ml-form-embedBody input[type="text"],
+      .ml-form-embedBody input[type="email"],
+      .ml-form-embedBody input[type="tel"] {
+        font-size: 16px !important;
+      }
     }
 
     /* ── MAILERLITE FORM OVERRIDES ── */
